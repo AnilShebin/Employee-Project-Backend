@@ -3,7 +3,7 @@ package com.groot.anil.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Date;
-//import java.util.List;
+import java.util.List;
 
 @Data
 @Entity
@@ -14,7 +14,7 @@ public class Employee {
     private int id;
 
     @Column(name = "employee_id")
-    private int employeeId;
+    private Integer employeeId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -32,13 +32,12 @@ public class Employee {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
-//    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Attendance> attendances;
-//
-//    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Performance> performances;
-//
-//    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Payroll> payrolls;
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Attendance> attendances;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Performance> performances;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Payroll> payrolls;
 }
