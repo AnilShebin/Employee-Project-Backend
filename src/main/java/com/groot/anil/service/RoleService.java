@@ -24,19 +24,18 @@ public class RoleService {
     @Autowired
     private PermissionRepository permissionRepository;
 
-    public Role addRole(int employeeId, String roleName, String description, List<Integer> permissionIds) {
-        Employee employee = employeeRepository.findById(employeeId)
+    public Role addRole(Role role) {
+        Employee employee = employeeRepository.findById(role.getEmployee().getId())
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        List<Permission> permissions = permissionRepository.findAllById(permissionIds);
+        List<Permission> permissions = permissionRepository.findAllById(
+                role.getPermissions().stream().map(Permission::getId).toList()
+        );
 
-        Role role = new Role();
         role.setEmployee(employee);
-        role.setRoleName(roleName);
-        role.setDescription(description);
+        role.setPermissions(permissions);
         role.setCreatedDate(new Date());
         role.setModifiedDate(new Date());
-        role.setPermissions(permissions);
 
         return roleRepository.save(role);
     }
@@ -54,17 +53,23 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
-    public Role updateRole(int id, String roleName, String description, List<Integer> permissionIds) {
-        Role role = roleRepository.findById(id)
+    public Role updateRole(int id, Role role) {
+        Role existingRole = roleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        role.setRoleName(roleName);
-        role.setDescription(description);
-        role.setModifiedDate(new Date());
+        Employee employee = employeeRepository.findById(role.getEmployee().getId())
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        List<Permission> permissions = permissionRepository.findAllById(permissionIds);
-        role.setPermissions(permissions);
+        List<Permission> permissions = permissionRepository.findAllById(
+                role.getPermissions().stream().map(Permission::getId).toList()
+        );
 
-        return roleRepository.save(role);
+        existingRole.setRoleName(role.getRoleName());
+        existingRole.setDescription(role.getDescription());
+        existingRole.setModifiedDate(new Date());
+        existingRole.setEmployee(employee);
+        existingRole.setPermissions(permissions);
+
+        return roleRepository.save(existingRole);
     }
 }

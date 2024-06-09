@@ -16,12 +16,9 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping
-    public ResponseEntity<Role> addRole(@RequestParam int employeeId,
-                                        @RequestParam String roleName,
-                                        @RequestParam String description,
-                                        @RequestParam List<Integer> permissionIds) {
-        Role role = roleService.addRole(employeeId, roleName, description, permissionIds);
-        return ResponseEntity.ok(role);
+    public ResponseEntity<Role> addRole(@RequestBody Role role) {
+        Role savedRole = roleService.addRole(role);
+        return ResponseEntity.ok(savedRole);
     }
 
     @GetMapping
@@ -37,11 +34,8 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable int id,
-                                           @RequestParam String roleName,
-                                           @RequestParam String description,
-                                           @RequestParam List<Integer> permissionIds) {
-        Role updatedRole = roleService.updateRole(id, roleName, description, permissionIds);
+    public ResponseEntity<Role> updateRole(@PathVariable int id, @RequestBody Role role) {
+        Role updatedRole = roleService.updateRole(id, role);
         return ResponseEntity.ok(updatedRole);
     }
 

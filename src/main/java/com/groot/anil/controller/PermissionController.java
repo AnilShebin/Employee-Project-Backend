@@ -16,9 +16,9 @@ public class PermissionController {
     private PermissionService permissionService;
 
     @PostMapping
-    public ResponseEntity<Permission> addPermission(@RequestParam String permissionName) {
-        Permission permission = permissionService.addPermission(permissionName);
-        return ResponseEntity.ok(permission);
+    public ResponseEntity<Permission> addPermission(@RequestBody Permission permission) {
+        Permission savedPermission = permissionService.addPermission(permission.getPermissionName());
+        return ResponseEntity.ok(savedPermission);
     }
 
     @GetMapping
